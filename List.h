@@ -15,45 +15,36 @@
 
 template <typename T>
 class List {
- public:
-  typedef T value_type;
-  typedef ListNode<T> node_type;
-  typedef ListIterator<T> iterator;
-  typedef ListConstIterator<T> const_iterator;
-
+public:
   explicit List(MemoryAllocator* allocator) : _buffer(allocator), _firstNode(NULL) {}
 
   void setBuffer(MemoryAllocator* allocator) { _buffer = allocator; }
 
-  bool success() const {
-    return _buffer != NULL;
-  }
-
   size_t size() const {
     size_t nodeCount = 0;
-    for (node_type *node = _firstNode; node; node = node->next) nodeCount++;
+    for (ListNode<T> *node = _firstNode; node; node = node->next) nodeCount++;
     return nodeCount;
   }
 
-  iterator begin() {
-    return iterator(_firstNode);
+  ListIterator<T> begin() {
+    return ListIterator<T>(_firstNode);
   }
-  iterator end() {
-    return iterator(NULL);
+  ListIterator<T> end() {
+    return ListIterator<T>(NULL);
   }
 
-  const_iterator begin() const {
-    return const_iterator(_firstNode);
+  ListConstIterator<T> begin() const {
+    return ListConstIterator<T>(_firstNode);
   }
-  const_iterator end() const {
-    return const_iterator(NULL);
+  ListConstIterator<T> end() const {
+    return ListConstIterator<T>(NULL);
   }
   
-  node_type *addNewNode() {
-    node_type *newNode = new (_buffer) node_type();
+  ListNode<T> *addNewNode() {
+    ListNode<T> *newNode = new (_buffer) ListNode<T>();
 
     if (_firstNode) {
-      node_type *lastNode = _firstNode;
+      ListNode<T> *lastNode = _firstNode;
       while (lastNode->next) lastNode = lastNode->next;
       lastNode->next = newNode;
     } else {
@@ -63,19 +54,19 @@ class List {
     return newNode;
   }
 
-  void removeNode(node_type *nodeToRemove) {
+  void removeNode(ListNode<T> *nodeToRemove) {
     if (!nodeToRemove) return;
     if (nodeToRemove == _firstNode) {
       _firstNode = nodeToRemove->next;
     } else {
-      for (node_type *node = _firstNode; node; node = node->next)
+      for (ListNode<T> *node = _firstNode; node; node = node->next)
         if (node->next == nodeToRemove) node->next = nodeToRemove->next;
     }
   }
   
 protected:
   MemoryAllocator* _buffer;
-  node_type *_firstNode;
+  ListNode<T> *_firstNode;
 };
 
 #endif
