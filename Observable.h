@@ -5,17 +5,24 @@
 #ifndef _OBSERVABLE_H_
 #define _OBSERVABLE_H_
 
+#define MAX_ARR_SIZE_OBS  8
+#define MAX_ARR_SIZE_EVT  16
+
 class Observable : public ComponentInterface {
 private:
-  List<Observer&> _obsList;
-  List<Event&> _evtList;
+  Observer* _obsList[MAX_ARR_SIZE_OBS];
+  uint32_t  _obsListIdx;
+  Event*    _evtList[MAX_ARR_SIZE_EVT];
+  uint32_t  _evtListIdx;
 
 public:
-  void subscribe(Observer& obs);
+  explicit Observable();
+  virtual ~Observable();
+  void subscribe(Observer* obs);
 
-protect:
-  void pushEvent(Event& evt);
-  virtual List<Event&>& generateEvents() = 0;
+protected:
+  void pushEvent(Event* evt);
+  virtual void generateEvents() = 0;
 
   // Override ComponentInterface
 public:

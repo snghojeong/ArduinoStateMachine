@@ -3,7 +3,7 @@
 
 class Observer {
 public:
-  virtual void notify(Event evt) = 0;
+  virtual void notify(Event* evt) = 0;
 };
 
 #endif
