@@ -1,24 +1,27 @@
-#ifndef _STATE_MACHINE_COMPONENT_H_
-#include "StateMachineComponent.h"
+#ifndef _STATE_MACHINE_H_
+#include "StateMachine.h"
 #endif
 
-#ifndef _EVENT_PROCEDURE_INTERFACE_H_
-#include "EventProcedureInterface.h"
+#ifndef _EVENT_PROCEDURE_H_
+#include "EventProcedure.h"
 #endif
 
-#ifndef _ARDUINO_WIFI_COMPONENT_H_
-#define _ARDUINO_WIFI_COMPONENT_H_
+#ifndef _EXAMPLE_STATE_MACHINE_H_
+#define _EXAMPLE_STATE_MACHINE_H_
 
-class ArduinoWifiComponent : public StateMachineComponent {
+class ExampleStateMachine : public StateMachine {
+private:
+  State _firstState;
+  State _secondState;
+  State _thirdState;
+  State _returnState;
+
 public:
-  explicit ArduinoWifiComponent();
-  explicit ArduinoWifiComponent(MemoryAllocator* allocator);
-  virtual ~ArduinoWifiComponent();
+  static Event _transExEvt;
 
-  static bool connectToWiFi(); // @Seungho TODO: Find another pattern. (delete static, private encapsulation)
-
-protected:
-  virtual bool initStateMachine();
+public:
+  explicit ExampleStateMachine();
+  virtual ~ExampleStateMachine();
 
   // Override ComponentInterface
 public:
@@ -26,53 +29,40 @@ public:
 
   // Event procedure define
 private:
-  class InitEntered : public EventProcedureInterface {
+  class DuringFirstState : public EventProcedure {
   public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
+    explicit DuringFirstState(StateMachine& stateMachine) : EventProcedure(stateMachine) {}
+    virtual void operator()();
   };
-  InitEntered _initEntered;
+  DuringFirstState _duringFirstState;
 
-  class InitEnded : public EventProcedureInterface {
+  class DuringSecondState : public EventProcedure {
   public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
+    explicit DuringSecondState(StateMachine& stateMachine) : EventProcedure(stateMachine) {}
+    virtual void operator()();
   };
-  InitEnded _initEnded;
+  DuringSecondState _duringSecondState;
 
-  class Connected : public EventProcedureInterface {
+  class DuringThirdState : public EventProcedure {
   public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
+    explicit DuringThirdState(StateMachine& stateMachine) : EventProcedure(stateMachine) {}
+    virtual void operator()();
   };
-  Connected _connected;
+  DuringThirdState _duringThirdState;
 
-  class Failed : public EventProcedureInterface {
+  class DuringReturnState : public EventProcedure {
   public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
+    explicit DuringReturnState(StateMachine& stateMachine) : EventProcedure(stateMachine) {}
+    virtual void operator()();
   };
-  Failed _failed;
+  DuringReturnState _duringReturnState;
 
-  class Wait : public EventProcedureInterface {
+  class TransitProc : public EventProcedure {
   public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
+    explicit TransitProc(StateMachine& stateMachine) : EventProcedure(stateMachine) {}
+    virtual void operator()();
   };
-  Wait _wait;
-
-  class Connect : public EventProcedureInterface {
-  public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
-  };
-  Connect _connect;
-
-  class CheckConnection : public EventProcedureInterface {
-  public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
-  };
-  CheckConnection _checkConn;
-
-  class Disconnected : public EventProcedureInterface {
-  public:
-    virtual unsigned int operator()(StateMachineComponent& stateMachine);
-  };
-  Disconnected _disconnected;
+  TransitProc _transitProc;
 };
 
 #endif

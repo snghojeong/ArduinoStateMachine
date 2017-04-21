@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <CurieTimerOne.h>
+#include <TimerOne.h>
 
 #include "ComponentInterface.h"
 #include "ComponentPool.h"
@@ -45,8 +45,8 @@ void setup()
     }
   }
 
-  CurieTimerOne.initialize(1000);
-  CurieTimerOne.attachInterrupt(timer1msLoop);
+  Timer1.initialize(1000);
+  Timer1.attachInterrupt(timer1msLoop);
 }
 
 void loop()

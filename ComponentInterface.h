@@ -2,8 +2,6 @@
 #define _COMPONENT_INTERFACE_H_
 
 class ComponentInterface {
-protected:
-  String _name;
 public:
   virtual bool setup() = 0;
   virtual void loop() = 0;

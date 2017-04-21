@@ -1,5 +1,5 @@
 #ifndef _COMPONENT_INTERFACE_H_
-#include <ComponentInterface.h>
+#include "ComponentInterface.h"
 #endif
 
 #ifndef _OBSERVABLE_H_
@@ -7,6 +7,9 @@
 
 #define MAX_ARR_SIZE_OBS  8
 #define MAX_ARR_SIZE_EVT  16
+
+class Observer;
+class Event;
 
 class Observable : public ComponentInterface {
 private:
@@ -19,15 +22,16 @@ public:
   explicit Observable();
   virtual ~Observable();
   void subscribe(Observer* obs);
+  void pushEvent(Event* evt);
 
 protected:
-  void pushEvent(Event* evt);
+  uint32_t getEvtListLen() const { return _evtListIdx; }
   virtual void generateEvents() = 0;
 
   // Override ComponentInterface
 public:
   virtual bool setup();
-  virtual void loop(); // 1.gen evts 2.clone _evtList 3.process cloned _evtList 
+  virtual void loop();
 
   virtual uint32_t getPeriod() const = 0;
 };

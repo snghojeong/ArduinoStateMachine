@@ -1,4 +1,7 @@
+#include <Arduino.h>
+
 #include "Observable.h"
+#include "Observer.h"
 
 
 Observable::Observable()
@@ -25,13 +28,14 @@ bool Observable::setup()
 {
 }
 
-void Observable::loop() // 1.gen evts 2.clone _evtList 3.process cloned _evtList 
+void Observable::loop()
 {
   Event* tmpEvtList[MAX_ARR_SIZE_EVT];
-  uint32_t evtListLen = _evtListIdx;
+  uint32_t evtListLen;
 
   this->generateEvents();
 
+  evtListLen = _evtListIdx;
   for (int i = 0; i < evtListLen; i++) {
     tmpEvtList[i] = _evtList[i];
     _evtList[i] = NULL;

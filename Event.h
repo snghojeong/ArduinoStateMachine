@@ -14,12 +14,15 @@
 
 class Event {
 private:
-  static unsigned int _id;
+  static uint32_t _nextID;
+  uint32_t _id;
 public:
-  Event() { ++_id; }
-  virtual ~Event();
+  explicit Event() { _id = ++_nextID; }
+  virtual ~Event() {}
 
-  unsigned int getID() const { return _id }
+  unsigned int getID() const { return _id; }
+  bool operator==(const Event* evt) const { return (_id == evt->getID()); }
+  bool operator==(const Event& evt) const { return (_id == evt.getID()); }
 };
 
 #endif

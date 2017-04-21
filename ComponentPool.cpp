@@ -2,25 +2,17 @@
 
 #include "ComponentPool.h"
 #include "ComponentInterface.h"
-#include "StaticMemoryAllocator.h"
-#include "AsyncConsoleComponent.h"
-#include "ArduinoWifiComponent.h"
-#include "HttpClientComponent.h"
-#include "NonVolatileMemComponent.h"
-#include "SensorComponent.h"
+#include "ExampleStateMachine.h"
 
 
 void ComponentPool::set1msLoopComponents(ComponentPool& compPool)
 {
-  compPool.addComponent(new AsyncConsoleComponent());
+  //compPool.addComponent(new AsyncConsoleComponent());
 }
 
 void ComponentPool::setMainLoopComponents(ComponentPool& compPool)
 {
-  compPool.addComponent(new NonVolatileMemComponent());
-  //compPool.addComponent(new ArduinoWifiComponent(&(compPool._memAllocator)));
-  //compPool.addComponent(new HttpClientComponent());
-  //compPool.addComponent(new SensorComponent());
+  compPool.addComponent(new ExampleStateMachine());
 }
 
 ComponentPool::ComponentPool()
