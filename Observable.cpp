@@ -26,6 +26,7 @@ void Observable::pushEvent(Event* evt)
 
 bool Observable::setup()
 {
+  return true;
 }
 
 void Observable::loop()

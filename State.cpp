@@ -3,14 +3,15 @@
 #include "State.h"
 #include "Event.h"
 
-State::State()
+State::State(StateMachine& owner)
+: _owner(owner)
 {
   _evtListIdx = 0;
-  _duringProc = NULL;
+  _duringLambda = NULL;
 
   for (int i = 0; i < MAX_ARR_SIZE_STS_EVT; i++) {
     _evtList[i] = NULL;
-    _evtProcList[i] = NULL;
+    _evtProcLambda[i] = NULL;
     _nextState[i] = NULL;
   }
 }
@@ -19,11 +20,11 @@ State::~State()
 {
 }
 
-void State::registerEvent(Event* evt, EventProcedure* evtProc, State* nextState)
+void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine))
 {
   if (_evtListIdx < MAX_ARR_SIZE_STS_EVT) {
     _evtList[_evtListIdx] = evt;
-    _evtProcList[_evtListIdx] = evtProc;
+    _evtProcLambda[_evtListIdx] = evtProcLambda;
     _nextState[_evtListIdx] = nextState;
     _evtListIdx++;
   } else {
@@ -35,7 +36,7 @@ State* State::processEvent(Event* evt)
 {
   for (int i = 0; i < _evtListIdx; i++) {
     if ((*_evtList[i]) == (*evt)) {
-      (*_evtProcList[i])();
+      (_evtProcLambda[i])(_owner);
       return _nextState[i];
     }
   }

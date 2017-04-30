@@ -6,9 +6,9 @@
 Event StateMachine::_during;
 
 
-StateMachine::StateMachine()
+StateMachine::StateMachine(State* initState)
+: _currState(initState)
 {
-  //_stateListIdx = 0;
   this->subscribe(this);
 }
 

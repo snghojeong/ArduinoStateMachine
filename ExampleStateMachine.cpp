@@ -4,16 +4,41 @@
 
 Event ExampleStateMachine::_transExEvt;
 
-ExampleStateMachine::ExampleStateMachine() : _duringFirstState(*this), _duringSecondState(*this), _duringThirdState(*this), _duringReturnState(*this), _transitProc(*this)
+ExampleStateMachine::ExampleStateMachine()
+  : StateMachine(&_firstState), _firstState(*this), _secondState(*this), _thirdState(*this), _returnState(*this)
 {
-  _firstState.registerDuring(&_duringFirstState);
-  _firstState.registerEvent(&_transExEvt, &_transitProc, &_secondState);
-  _secondState.registerDuring(&_duringSecondState);
-  _secondState.registerEvent(&_transExEvt, &_transitProc, &_thirdState);
-  _thirdState.registerDuring(&_duringThirdState);
-  _thirdState.registerEvent(&_transExEvt, &_transitProc, &_returnState);
-  _returnState.registerDuring(&_duringReturnState);
-  _returnState.registerEvent(&_transExEvt, &_transitProc, &_firstState);
+  _firstState.registerDuring([](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.duringFirstState();
+      });
+  _firstState.registerEvent(&_transExEvt, &_secondState, [](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.transit();
+      });
+  _secondState.registerDuring([](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.duringSecondState();
+      });
+  _secondState.registerEvent(&_transExEvt, &_thirdState, [](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.transit();
+      });
+  _thirdState.registerDuring([](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.duringThirdState();
+      });
+  _thirdState.registerEvent(&_transExEvt, &_returnState, [](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.transit();
+      });
+  _returnState.registerDuring([](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.duringReturnState();
+      });
+  _returnState.registerEvent(&_transExEvt, &_firstState, [](StateMachine& owner) {
+      ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
+      thisRef.transit();
+      });
 
   _currState = &_firstState;
 }
@@ -27,7 +52,7 @@ uint32_t ExampleStateMachine::getPeriod() const
   return 1000;
 }
 
-void ExampleStateMachine::DuringFirstState::operator()()
+void ExampleStateMachine::duringFirstState()
 {
   static uint8_t cnt = 0;
 
@@ -35,11 +60,11 @@ void ExampleStateMachine::DuringFirstState::operator()()
 
   if (++cnt > 10) {
     cnt = 0;
-    _owner.pushEvent(&_transExEvt);
+    this->pushEvent(&_transExEvt);
   }
 }
 
-void ExampleStateMachine::DuringSecondState::operator()()
+void ExampleStateMachine::duringSecondState()
 {
   static uint8_t cnt = 0;
 
@@ -47,11 +72,11 @@ void ExampleStateMachine::DuringSecondState::operator()()
 
   if (++cnt > 10) {
     cnt = 0;
-    _owner.pushEvent(&_transExEvt);
+    this->pushEvent(&_transExEvt);
   }
 }
 
-void ExampleStateMachine::DuringThirdState::operator()()
+void ExampleStateMachine::duringThirdState()
 {
   static uint8_t cnt = 0;
 
@@ -59,11 +84,11 @@ void ExampleStateMachine::DuringThirdState::operator()()
 
   if (++cnt > 10) {
     cnt = 0;
-    _owner.pushEvent(&_transExEvt);
+    this->pushEvent(&_transExEvt);
   }
 }
 
-void ExampleStateMachine::DuringReturnState::operator()()
+void ExampleStateMachine::duringReturnState()
 {
   static uint8_t cnt = 0;
 
@@ -71,11 +96,11 @@ void ExampleStateMachine::DuringReturnState::operator()()
 
   if (++cnt > 10) {
     cnt = 0;
-    _owner.pushEvent(&_transExEvt);
+    this->pushEvent(&_transExEvt);
   }
 }
 
-void ExampleStateMachine::TransitProc::operator()()
+void ExampleStateMachine::transit()
 {
   Serial.println(F("Transition."));
 }
