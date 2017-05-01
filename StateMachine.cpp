@@ -19,20 +19,20 @@ StateMachine::~StateMachine()
 void StateMachine::generateEvents()
 {
   if (this->getEvtListLen() == 0) {
-    this->pushEvent(&_during);
+    this->pushEvent(&_during, nullptr, 0);
   }
 }
 
-void StateMachine::notify(Event* evt)
+void StateMachine::notify(Event* evt, uint8_t* data, size_t dataLen)
 {
   if ((*evt) == _during) {
-    _currState->during();
+    _currState->during(data, dataLen);
   } else {
-    State* nextState = _currState->processEvent(evt);
+    State* nextState = _currState->processEvent(evt, data, dataLen);
     if (nextState != NULL) {
       _currState = nextState;
     } else {
-      _currState->during();
+      _currState->during(data, dataLen);
     }
   }
 }

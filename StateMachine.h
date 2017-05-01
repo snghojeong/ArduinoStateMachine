@@ -34,7 +34,7 @@ protected:
 
   // Override Observer
 public:
-  virtual void notify(Event* evt);
+  virtual void notify(Event* evt, uint8_t* data, size_t dataLen);
 };
 
 #endif

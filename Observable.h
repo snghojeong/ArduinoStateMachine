@@ -16,13 +16,15 @@ private:
   Observer* _obsList[MAX_ARR_SIZE_OBS];
   uint32_t  _obsListIdx;
   Event*    _evtList[MAX_ARR_SIZE_EVT];
-  uint32_t  _evtListIdx;
+  uint8_t*  _dataList[MAX_ARR_SIZE_EVT];
+  size_t    _dataLenList[MAX_ARR_SIZE_EVT];
+  uint32_t  _evtDataListIdx;
 
 public:
   explicit Observable();
   virtual ~Observable();
   void subscribe(Observer* obs);
-  void pushEvent(Event* evt);
+  void pushEvent(Event* evt, uint8_t* data, size_t len);
 
 protected:
   uint32_t getEvtListLen() const { return _evtListIdx; }

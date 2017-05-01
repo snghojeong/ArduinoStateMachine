@@ -32,11 +32,11 @@ void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(St
   }
 }
 
-State* State::processEvent(Event* evt)
+State* State::processEvent(Event* evt, uint8_t* data, size_t dataLen)
 {
   for (int i = 0; i < _evtListIdx; i++) {
     if ((*_evtList[i]) == (*evt)) {
-      (_evtProcLambda[i])(_owner);
+      (_evtProcLambda[i])(_owner, data, dataLen);
       return _nextState[i];
     }
   }
