@@ -7,7 +7,7 @@
 Observable::Observable()
 {
   _obsListIdx = 0;
-  _evtListIdx = 0;
+  _evtDataListIdx = 0;
 }
 
 Observable::~Observable()
@@ -21,10 +21,10 @@ void Observable::subscribe(Observer* obs)
 
 void Observable::pushEvent(Event* evt, uint8_t* data, size_t dataLen)
 {
-  _evtList[_evtListIdx] = evt;
-  _dataList[_evtListIdx] = data;
-  _dataLenList[_evtListIdx] = dataLen;
-  ++_evtListIdx;
+  _evtList[_evtDataListIdx] = evt;
+  _dataList[_evtDataListIdx] = data;
+  _dataLenList[_evtDataListIdx] = dataLen;
+  ++_evtDataListIdx;
 }
 
 bool Observable::setup()
@@ -41,14 +41,14 @@ void Observable::loop()
 
   this->generateEvents();
 
-  evtListLen = _evtListIdx;
+  evtListLen = _evtDataListIdx;
   for (int i = 0; i < evtListLen; i++) {
     tmpEvtList[i] = _evtList[i];
     tmpDataList[i] = _dataList[i];
     tmpDataLenList[i] = _dataLenList[i];
     _evtList[i] = NULL;
   }
-  _evtListIdx = 0;
+  _evtDataListIdx = 0;
 
   for (int i = 0; i < _obsListIdx; i++) {
     for (int j = 0; j < evtListLen; j++) {

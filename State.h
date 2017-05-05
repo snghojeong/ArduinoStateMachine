@@ -13,18 +13,16 @@ private:
   State*        _nextState[MAX_ARR_SIZE_STS_EVT];
   uint32_t      _evtListIdx;
   void (*_evtProcLambda[MAX_ARR_SIZE_STS_EVT])(StateMachine& stateMachine, uint8_t* data, size_t dataLen);
-  void (*_duringLambda)(StateMachine& stateMachine, uint8_t* data, size_t dataLen);
+  void (*_duringLambda)(StateMachine& stateMachine);
 
 public:
   explicit State(StateMachine& owner);
-  //explicit State(Event* evtList[], EventProcedure* evtProcList[], EventProcedure* duringProc);
-  // usage) static State exState({evt1, evt2, evt3}, {evtProc1, evtProc2, evtProc3}, during );
   virtual ~State();
 
   void registerDuring(void (*duringLambda)(StateMachine& stateMachine)) { _duringLambda = duringLambda; }
-  void registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine));
+  void registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine, uint8_t* data, size_t dataLen));
   State* processEvent(Event* evt, uint8_t* data, size_t dataLen);
-  void during(uint8_t* data, size_t dataLen) { (_duringLambda)(_owner, data, dataLen); }
+  void during() { (_duringLambda)(_owner); }
 };
 
 #endif

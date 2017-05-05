@@ -24,10 +24,10 @@ public:
   explicit Observable();
   virtual ~Observable();
   void subscribe(Observer* obs);
-  void pushEvent(Event* evt, uint8_t* data, size_t len);
+  void pushEvent(Event* evt, uint8_t* data = nullptr, size_t len = 0);
 
 protected:
-  uint32_t getEvtListLen() const { return _evtListIdx; }
+  uint32_t getEvtListLen() const { return _evtDataListIdx; }
   virtual void generateEvents() = 0;
 
   // Override ComponentInterface

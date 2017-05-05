@@ -26,13 +26,13 @@ void StateMachine::generateEvents()
 void StateMachine::notify(Event* evt, uint8_t* data, size_t dataLen)
 {
   if ((*evt) == _during) {
-    _currState->during(data, dataLen);
+    _currState->during();
   } else {
     State* nextState = _currState->processEvent(evt, data, dataLen);
     if (nextState != NULL) {
       _currState = nextState;
     } else {
-      _currState->during(data, dataLen);
+      _currState->during();
     }
   }
 }

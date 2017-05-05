@@ -11,7 +11,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringFirstState();
       });
-  _firstState.registerEvent(&_transExEvt, &_secondState, [](StateMachine& owner) {
+  _firstState.registerEvent(&_transExEvt, &_secondState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -19,7 +19,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringSecondState();
       });
-  _secondState.registerEvent(&_transExEvt, &_thirdState, [](StateMachine& owner) {
+  _secondState.registerEvent(&_transExEvt, &_thirdState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -27,7 +27,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringThirdState();
       });
-  _thirdState.registerEvent(&_transExEvt, &_returnState, [](StateMachine& owner) {
+  _thirdState.registerEvent(&_transExEvt, &_returnState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -35,7 +35,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringReturnState();
       });
-  _returnState.registerEvent(&_transExEvt, &_firstState, [](StateMachine& owner) {
+  _returnState.registerEvent(&_transExEvt, &_firstState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });

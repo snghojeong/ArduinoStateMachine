@@ -20,7 +20,7 @@ State::~State()
 {
 }
 
-void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine))
+void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine, uint8_t* data, size_t dataLen))
 {
   if (_evtListIdx < MAX_ARR_SIZE_STS_EVT) {
     _evtList[_evtListIdx] = evt;
