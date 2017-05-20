@@ -52,7 +52,7 @@ void Observable::loop()
 
   for (int i = 0; i < _obsListIdx; i++) {
     for (int j = 0; j < evtListLen; j++) {
-      _obsList[i]->notify(tmpEvtList[j], tmpDataList[i], tmpDataLenList[i]);
+      _obsList[i]->notify(tmpEvtList[j], tmpDataList[j], tmpDataLenList[j]);
     }
   }
 }

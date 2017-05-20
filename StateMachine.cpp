@@ -31,8 +31,6 @@ void StateMachine::notify(Event* evt, uint8_t* data, size_t dataLen)
     State* nextState = _currState->processEvent(evt, data, dataLen);
     if (nextState != NULL) {
       _currState = nextState;
-    } else {
-      _currState->during();
     }
   }
 }
