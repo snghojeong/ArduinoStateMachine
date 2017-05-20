@@ -19,13 +19,13 @@ StateMachine::~StateMachine()
 void StateMachine::generateEvents()
 {
   if (this->getEvtListLen() == 0) {
-    this->pushEvent(&_during, nullptr, 0);
+    this->pushEvent(&_during, (uint8_t*)this, sizeof(*this));
   }
 }
 
 void StateMachine::notify(Event* evt, uint8_t* data, size_t dataLen)
 {
-  if ((*evt) == _during) {
+  if (((*evt) == _during) && (data == (uint8_t*)this) ) {
     _currState->during();
   } else {
     State* nextState = _currState->processEvent(evt, data, dataLen);
