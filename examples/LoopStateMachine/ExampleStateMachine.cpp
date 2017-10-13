@@ -11,7 +11,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringFirstState();
       });
-  _firstState.registerEvent(&_transExEvt, &_secondState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
+  _firstState.registerEvent(&_transExEvt, &_secondState, [](StateMachine& owner) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -19,7 +19,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringSecondState();
       });
-  _secondState.registerEvent(&_transExEvt, &_thirdState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
+  _secondState.registerEvent(&_transExEvt, &_thirdState, [](StateMachine& owner) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -27,7 +27,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringThirdState();
       });
-  _thirdState.registerEvent(&_transExEvt, &_returnState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
+  _thirdState.registerEvent(&_transExEvt, &_returnState, [](StateMachine& owner) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -35,7 +35,7 @@ ExampleStateMachine::ExampleStateMachine()
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.duringReturnState();
       });
-  _returnState.registerEvent(&_transExEvt, &_firstState, [](StateMachine& owner, uint8_t* data, size_t dataLen) {
+  _returnState.registerEvent(&_transExEvt, &_firstState, [](StateMachine& owner) {
       ExampleStateMachine& thisRef = (ExampleStateMachine&)(owner); // TODO: We should handing exception.
       thisRef.transit();
       });
@@ -58,7 +58,7 @@ void ExampleStateMachine::duringFirstState()
 
   Serial.println(F("During first state."));
 
-  if (++cnt > 10) {
+  if (++cnt >= 3) {
     cnt = 0;
     this->pushEvent(&_transExEvt);
   }
@@ -70,7 +70,7 @@ void ExampleStateMachine::duringSecondState()
 
   Serial.println(F("During second state."));
 
-  if (++cnt > 10) {
+  if (++cnt >= 3) {
     cnt = 0;
     this->pushEvent(&_transExEvt);
   }
@@ -82,7 +82,7 @@ void ExampleStateMachine::duringThirdState()
 
   Serial.println(F("During third state."));
 
-  if (++cnt > 10) {
+  if (++cnt >= 3) {
     cnt = 0;
     this->pushEvent(&_transExEvt);
   }
@@ -94,7 +94,7 @@ void ExampleStateMachine::duringReturnState()
 
   Serial.println(F("During return state."));
 
-  if (++cnt > 10) {
+  if (++cnt >= 3) {
     cnt = 0;
     this->pushEvent(&_transExEvt);
   }

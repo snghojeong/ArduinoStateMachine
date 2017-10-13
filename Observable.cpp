@@ -2,12 +2,13 @@
 
 #include "Observable.h"
 #include "Observer.h"
+#include "Data.h"
 
 
 Observable::Observable()
 {
   _obsListIdx = 0;
-  _evtDataListIdx = 0;
+  _dataListIdx = 0;
 }
 
 Observable::~Observable()
@@ -19,12 +20,9 @@ void Observable::subscribe(Observer* obs)
   _obsList[_obsListIdx++] = obs;
 }
 
-void Observable::pushEvent(Event* evt, uint8_t* data, size_t dataLen)
+void Observable::push(Data* data)
 {
-  _evtList[_evtDataListIdx] = evt;
-  _dataList[_evtDataListIdx] = data;
-  _dataLenList[_evtDataListIdx] = dataLen;
-  ++_evtDataListIdx;
+  _dataList[_dataListIdx++] = data;
 }
 
 bool Observable::setup()
@@ -34,26 +32,23 @@ bool Observable::setup()
 
 void Observable::loop()
 {
-  Event*    tmpEvtList[MAX_ARR_SIZE_EVT];
-  uint8_t*  tmpDataList[MAX_ARR_SIZE_EVT];
-  size_t    tmpDataLenList[MAX_ARR_SIZE_EVT];
-  uint32_t  evtListLen;
+  Data*     tmpDataList[MAX_ARR_SIZE_EVT];
+  uint32_t  dataListLen;
 
-  this->generateEvents();
+  this->generateData();
 
-  evtListLen = _evtDataListIdx;
-  for (int i = 0; i < evtListLen; i++) {
-    tmpEvtList[i] = _evtList[i];
+  dataListLen = _dataListIdx;
+  for (int i = 0; i < dataListLen; i++) {
     tmpDataList[i] = _dataList[i];
-    tmpDataLenList[i] = _dataLenList[i];
-    _evtList[i] = NULL;
+    _dataList[i] = NULL;
   }
-  _evtDataListIdx = 0;
+  _dataListIdx = 0;
 
-  for (int i = 0; i < _obsListIdx; i++) {
-    for (int j = 0; j < evtListLen; j++) {
-      _obsList[i]->notify(tmpEvtList[j], tmpDataList[j], tmpDataLenList[j]);
+  for (int i = 0; i < dataListLen; i++) {
+    for (int j = 0; j < _obsListIdx; j++) {
+      _obsList[j]->notify(*(tmpDataList[i]));
     }
+    delete tmpDataList[i]; // TODO: we need another way to release.
   }
 }
 

@@ -9,26 +9,25 @@
 #define MAX_ARR_SIZE_EVT  16
 
 class Observer;
-class Event;
+class Data;
 
 class Observable : public ComponentInterface {
 private:
   Observer* _obsList[MAX_ARR_SIZE_OBS];
   uint32_t  _obsListIdx;
-  Event*    _evtList[MAX_ARR_SIZE_EVT];
-  uint8_t*  _dataList[MAX_ARR_SIZE_EVT];
-  size_t    _dataLenList[MAX_ARR_SIZE_EVT];
-  uint32_t  _evtDataListIdx;
+  Data*     _dataList[MAX_ARR_SIZE_EVT];
+  uint32_t  _dataListIdx;
 
 public:
   explicit Observable();
   virtual ~Observable();
   void subscribe(Observer* obs);
-  void pushEvent(Event* evt, uint8_t* data = nullptr, size_t len = 0);
 
 protected:
-  uint32_t getEvtListLen() const { return _evtDataListIdx; }
-  virtual void generateEvents() = 0;
+  void push(Data* data);
+  uint32_t getDataListLen() const { return _dataListIdx; }
+  Data& getData(uint32_t idx) const { return *(_dataList[idx]); }
+  virtual void generateData() = 0;
 
   // Override ComponentInterface
 public:

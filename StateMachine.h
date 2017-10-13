@@ -18,9 +18,6 @@
 #define _STATE_MACHINE_H_
 
 class StateMachine : public Observable, public Observer {
-public:
-  static Event _during;
-
 protected:
   State*    _currState;
 
@@ -28,13 +25,15 @@ public:
   explicit StateMachine(State* initState);
   virtual ~StateMachine();
 
+  void pushEvent(Event* evt);
+
   // Override Observable
 protected:
-  virtual void generateEvents();
+  virtual void generateData();
 
   // Override Observer
 public:
-  virtual void notify(Event* evt, uint8_t* data, size_t dataLen);
+  virtual void notify(Data& data);
 };
 
 #endif

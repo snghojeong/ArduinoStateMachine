@@ -1,9 +1,7 @@
 #include <Arduino.h>
 
 #include "StateMachine.h"
-
-
-Event StateMachine::_during;
+#include "Data.h"
 
 
 StateMachine::StateMachine(State* initState)
@@ -16,19 +14,35 @@ StateMachine::~StateMachine()
 {
 }
 
-void StateMachine::generateEvents()
+void StateMachine::pushEvent(Event* evt)
 {
-  if (this->getEvtListLen() == 0) {
-    this->pushEvent(&_during, (uint8_t*)this, sizeof(*this));
+  Data* data = new Data(sizeof(uint32_t)); // TODO: Data& data = CircularQueue<Data>::alloc();
+  evt->serialize(*data);
+  this->push(data);
+}
+
+void StateMachine::generateData()
+{
+  uint16_t evtCnt = 0;
+
+  for (int i = 0; i < this->getDataListLen(); i++) {
+    Data& data = this->getData(i);
+    if (data.type() == SERIALIZABLE_TYPE_EVENT) {
+      evtCnt++;
+      break;
+    }
+  }
+
+  if (evtCnt == 0) {
+    _currState->during();
   }
 }
 
-void StateMachine::notify(Event* evt, uint8_t* data, size_t dataLen)
+void StateMachine::notify(Data& data)
 {
-  if (((*evt) == _during) && (data == (uint8_t*)this) ) {
-    _currState->during();
-  } else {
-    State* nextState = _currState->processEvent(evt, data, dataLen);
+  if (data.type() == SERIALIZABLE_TYPE_EVENT) {
+    Event evt(data);
+    State* nextState = _currState->processEvent(evt);
     if (nextState != NULL) {
       _currState = nextState;
     }

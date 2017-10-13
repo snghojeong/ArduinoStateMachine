@@ -20,7 +20,7 @@ State::~State()
 {
 }
 
-void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine, uint8_t* data, size_t dataLen))
+void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(StateMachine& stateMachine))
 {
   if (_evtListIdx < MAX_ARR_SIZE_STS_EVT) {
     _evtList[_evtListIdx] = evt;
@@ -32,11 +32,11 @@ void State::registerEvent(Event* evt, State* nextState, void (*evtProcLambda)(St
   }
 }
 
-State* State::processEvent(Event* evt, uint8_t* data, size_t dataLen)
+State* State::processEvent(Event& evt)
 {
   for (int i = 0; i < _evtListIdx; i++) {
-    if ((*_evtList[i]) == (*evt)) {
-      (_evtProcLambda[i])(_owner, data, dataLen);
+    if ((*_evtList[i]) == evt) {
+      (_evtProcLambda[i])(_owner);
       return _nextState[i];
     }
   }
