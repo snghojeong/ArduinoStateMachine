@@ -2,6 +2,10 @@
 #include "SerializableInterface.h"
 #endif
 
+#ifndef _DATA_H_
+#include "Data.h"
+#endif
+
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
@@ -16,12 +20,14 @@
 //   ...
 // }
 
-class Data;
-
 class Event : public SerializableInterface {
+public:
+  static const Data::Type _evtDataType;
+
 private:
   static uint32_t _nextID;
   uint32_t _id;
+
 public:
   explicit Event() { _id = ++_nextID; }
   explicit Event(const Data& data);
@@ -33,7 +39,7 @@ public:
 
   // Override SerializableInterface
 public:
-  virtual uint16_t type();
+  virtual const Data::Type type() const;
   virtual size_t serialize(Data& data);
   virtual void deserialize(const Data& data);
 };

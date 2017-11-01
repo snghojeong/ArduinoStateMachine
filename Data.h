@@ -2,12 +2,29 @@
 #define _DATA_H_
 
 class Data {
+public:
+  class Type {
+  private:
+    static uint16_t _nextID;
+    uint16_t _id;
+
+  public:
+    explicit Type() : _id(_nextID++) {}
+    virtual ~Type() {}
+
+    uint16_t id() const { return _id; }
+    void setId(const uint16_t id) { _id = id; }
+    bool operator==(const Type* t) const { return (_id == t->id()); }
+    bool operator==(const Type& t) const { return (_id == t.id()); }
+    bool operator==(const uint16_t id) const { return (_id == id); }
+  };
+
 private:
   uint8_t* _buffer;
   size_t _size; // buffer size
   size_t _length; // data length
   bool _isHeap;
-  uint16_t _type;
+  Type _type;
 
 public:
   explicit Data() : _buffer(nullptr), _size(0), _length(0), _isHeap(false) {}
@@ -54,8 +71,8 @@ public:
   inline uint8_t* buffer() { return _buffer; }
   inline size_t size() const { return _size; }
   inline size_t length() const { return _length; }
-  inline uint16_t type() const { return _type; }
-  inline void setType(uint16_t type) { _type = type; }
+  inline Type type() const { return _type; }
+  inline void setType(Type type) { _type.setId(type.id()); }
   inline void setLength(size_t length) { _length = length; }
 };
 

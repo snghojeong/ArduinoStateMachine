@@ -27,7 +27,7 @@ void StateMachine::generateData()
 
   for (int i = 0; i < this->getDataListLen(); i++) {
     Data& data = this->getData(i);
-    if (data.type() == SERIALIZABLE_TYPE_EVENT) {
+    if (data.type() == Event::_evtDataType) {
       evtCnt++;
       break;
     }
@@ -40,7 +40,7 @@ void StateMachine::generateData()
 
 void StateMachine::notify(Data& data)
 {
-  if (data.type() == SERIALIZABLE_TYPE_EVENT) {
+  if (data.type() == Event::_evtDataType) {
     Event evt(data);
     State* nextState = _currState->processEvent(evt);
     if (nextState != NULL) {

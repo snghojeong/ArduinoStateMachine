@@ -1,9 +1,9 @@
 #include <Arduino.h>
 
 #include "Event.h"
-#include "Data.h"
 
 
+const Data::Type _evtDataType;
 uint32_t Event::_nextID = 0;
 
 Event::Event(const Data& data)
@@ -11,9 +11,9 @@ Event::Event(const Data& data)
   this->deserialize(data);
 }
 
-uint16_t Event::type()
+const Data::Type Event::type() const
 {
-  return SERIALIZABLE_TYPE_EVENT;
+  return _evtDataType;
 }
 
 size_t Event::serialize(Data& data)
