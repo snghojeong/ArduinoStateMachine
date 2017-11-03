@@ -30,12 +30,14 @@ public:
   explicit Data() : _buffer(nullptr), _size(0), _length(0), _isHeap(false) {}
   explicit Data(size_t size) : _size(size), _length(0), _isHeap(true) {
     _buffer = new uint8_t[size];
+    memset(_buffer, 0, size);
   }
   virtual ~Data() { if (_isHeap) delete[] _buffer; }
 
   inline void alloc(size_t size) {
     free();
     _buffer = new uint8_t[size];
+    memset(_buffer, 0, size);
     _size = size;
     _isHeap = true;
   }
