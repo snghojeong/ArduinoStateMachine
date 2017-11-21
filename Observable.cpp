@@ -1,4 +1,10 @@
+#ifdef LINUX
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#else
 #include <Arduino.h>
+#endif
 
 #include "Observable.h"
 #include "Observer.h"

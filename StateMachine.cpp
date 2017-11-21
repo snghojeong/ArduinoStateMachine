@@ -1,4 +1,10 @@
+#ifdef LINUX
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#else
 #include <Arduino.h>
+#endif
 
 #include "StateMachine.h"
 #include "Data.h"
@@ -43,7 +49,7 @@ void StateMachine::notify(Data& data)
   if (data.type() == Event::_evtDataType) {
     Event evt(data);
     State* nextState = _currState->processEvent(evt);
-    if (nextState != NULL) {
+    if (nextState != nullptr) {
       _currState = nextState;
     }
   }

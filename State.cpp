@@ -1,4 +1,10 @@
+#ifdef LINUX
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#else
 #include <Arduino.h>
+#endif
 
 #include "State.h"
 #include "Event.h"
@@ -7,12 +13,12 @@ State::State(StateMachine& owner)
 : _owner(owner)
 {
   _evtListIdx = 0;
-  _duringLambda = NULL;
+  _duringLambda = nullptr;
 
   for (int i = 0; i < MAX_ARR_SIZE_STS_EVT; i++) {
-    _evtList[i] = NULL;
-    _evtProcLambda[i] = NULL;
-    _nextState[i] = NULL;
+    _evtList[i] = nullptr;
+    _evtProcLambda[i] = nullptr;
+    _nextState[i] = nullptr;
   }
 }
 
@@ -40,6 +46,6 @@ State* State::processEvent(Event& evt)
       return _nextState[i];
     }
   }
-  return NULL;
+  return nullptr;
 }
 
