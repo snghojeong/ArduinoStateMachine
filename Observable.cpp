@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <ctime>
 #else
 #include <Arduino.h>
 #endif
@@ -30,6 +31,14 @@ void Observable::push(Data* data)
 {
   _dataList[_dataListIdx++] = data;
 }
+
+#ifdef LINUX
+unsigned long Observable::millis() {
+  clock_t startTime = clock();
+  double seconds = startTime / CLOCKS_PER_SEC;
+  return (unsigned long)(seconds * 1000);
+}
+#endif
 
 bool Observable::setup()
 {

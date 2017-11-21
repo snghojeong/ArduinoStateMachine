@@ -28,6 +28,9 @@ protected:
   uint32_t getDataListLen() const { return _dataListIdx; }
   Data& getData(uint32_t idx) const { return *(_dataList[idx]); }
   virtual void generateData() = 0;
+#ifdef LINUX
+  unsigned long millis();
+#endif
 
   // Override ComponentInterface
 public:
