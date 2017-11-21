@@ -9,7 +9,7 @@
 #include "Event.h"
 
 
-const Data::Type _evtDataType;
+const Data::Type Event::_evtDataType;
 uint32_t Event::_nextID = 0;
 
 Event::Event(const Data& data)
