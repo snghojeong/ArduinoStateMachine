@@ -19,6 +19,10 @@ public:
     bool operator==(const uint16_t id) const { return (_id == id); }
   };
 
+public:
+  static const Type _binDataType;
+  static const Type _strDataType;
+
 private:
   uint8_t* _buffer;
   size_t _size; // buffer size
@@ -37,6 +41,10 @@ public:
   inline void alloc(size_t size) {
     free();
     _buffer = new uint8_t[size];
+    if (_buffer == nullptr) {
+      //traceln("[Data] memory alloc failed.");
+      return;
+    }
     memset(_buffer, 0, size);
     _size = size;
     _isHeap = true;
@@ -54,6 +62,13 @@ public:
       delete[] _buffer;
       _buffer = nullptr;
       _isHeap = false;
+    }
+  }
+
+  inline void clear() {
+    if (_buffer != nullptr) {
+      //memset(_buffer, 0, _size);
+      _length = 0;
     }
   }
 
