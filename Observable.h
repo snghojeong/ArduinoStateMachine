@@ -22,9 +22,9 @@ public:
   explicit Observable();
   virtual ~Observable();
   void subscribe(Observer* obs);
+  void push(Data* data);
 
 protected:
-  void push(Data* data);
   uint32_t getDataListLen() const { return _dataListIdx; }
   Data& getData(uint32_t idx) const { return *(_dataList[idx]); }
   virtual void generateData() = 0;
