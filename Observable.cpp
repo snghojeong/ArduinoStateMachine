@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <cstring>
 #include <ctime>
+#include <time.h>
+#include <math.h>
 #else
 #include <Arduino.h>
 #endif
@@ -34,9 +36,19 @@ void Observable::push(Data* data)
 
 #ifdef LINUX
 unsigned long Observable::millis() {
-  clock_t startTime = clock();
-  double seconds = startTime / CLOCKS_PER_SEC;
-  return (unsigned long)(seconds * 1000);
+  unsigned long ret = 0;
+  struct timespec spec;
+  unsigned long ms;
+  time_t s;
+
+  clock_gettime(clock_realtime, &spec);
+
+  s = spec.tv_sec;
+  ms = round(spec.tv_nsec/1.0e6);
+
+  ret = ((unsigned long)s * 1000) + ms;
+
+  return ret;
 }
 #endif
 
