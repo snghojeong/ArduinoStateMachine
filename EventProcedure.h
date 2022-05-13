@@ -8,7 +8,7 @@ protected:
   StateMachine& _owner;
 public:
   explicit EventProcedure(StateMachine& stateMachine) : _owner(stateMachine) {}
-  virtual void operator()() = 0;
+  virtual void operator() = 0;
 };
 
 #endif
