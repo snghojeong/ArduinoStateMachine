@@ -26,7 +26,7 @@ size_t Event::serialize(Data& data)
 {
   data.copyFrom((uint8_t*)(&_id), sizeof(_id));
   data.setType(this->type());
-  return sizeof(_id);
+  return sizeof(uint32_t);
 }
 
 void Event::deserialize(const Data& data)
