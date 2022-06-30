@@ -7,6 +7,7 @@ public:
   virtual void loop() = 0;
 
   virtual uint32_t getPeriod() const = 0;
+  virtual int32_t getValue() const = 0;
 };
 
 #endif
